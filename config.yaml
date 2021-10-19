@@ -91,20 +91,20 @@ params:
         url: blogs/aspirations
       - image: pic03.jpg
         subtitle: Lorem Etiam Nullam
-        title: Magna
-        url: blogs/magna
+        title: Airbnb Prices Analysis
+        url: blogs/Airbnb
       - image: pic04.jpg
         subtitle: Nisl Sed Aliquam
         title: Ipsum
         url: blogs/ipsum
-      - image: pic05.jpg
-        subtitle: Ipsum Dolor Sit Amet
-        title: Consequat
-        url: blogs/ipsum
-      - image: pic06.jpg
-        subtitle: Feugiat Amet Tempus
-        title: Etiam
-        url: blogs/ipsum
+      #- image: pic05.jpg
+      #  subtitle: Ipsum Dolor Sit Amet
+      #  title: Consequat
+      #  url: blogs/ipsum
+      #- image: pic06.jpg
+      #  subtitle: Feugiat Amet Tempus
+      #  title: Etiam
+      #  url: blogs/ipsum
   two:
     buttonText: Get Started
     enable: yes
@@ -114,5 +114,5 @@ params:
 #      pellentesque lorem ipsum dolor. \n    Nullam et orci eu lorem consequat tincidunt.
 #      Vivamus et sagittis libero.\n    Mauris aliquet magna magna sed nunc rhoncus
 #      amet pharetra et feugiat tempus."
-    title: Massa libero
+    # title: Massa libero
     url: blogs
