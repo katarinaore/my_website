@@ -54,15 +54,7 @@ library(huxtable)
 ```
 
 
-In your final group assignment you have to analyse data about Airbnb listings and fit a model to predict the total cost for two people staying 4 nights in an AirBnB in a city. You can download AirBnB data from [insideairbnb.com](http://insideairbnb.com/get-the-data.html){target="_blank"}; it was originally scraped from airbnb.com. 
-
-The following [Google sheet](https://docs.google.com/spreadsheets/d/1QrR-0PUGVWvDiVQL4LOk7w-xXwiDnM3dDtW6k15Hc7s/edit?usp=sharing) shows which cities you can use; please choose one of them and add your group name next to it, e.g., A7, B13. No city can have more than 2 groups per stream working on it; if this happens, I will allocate study groups to cities with the help of R's sampling.
-
-
-All of the listings are a GZ file, namely they are archive files compressed by the standard GNU zip (gzip) compression algorithm. You can download, save and extract the file if you wanted, but `vroom::vroom()` or `readr::read_csv()` can immediately read and extract this kind of a file. You should prefer `vroom()` as it is faster, but if vroom() is limited by a firewall, please use `read_csv()` instead.
-
-
-`vroom` will download the *.gz zipped file, unzip, and provide you with the dataframe. 
+In this article I will analyse data about Airbnb listings and fit a model to predict the total cost for two people staying 4 nights in an Airbnb in a city of Rio De Janeiro. 
 
 
 ```{r load_data, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
@@ -75,7 +67,7 @@ listings <- vroom("http://data.insideairbnb.com/brazil/rj/rio-de-janeiro/2021-09
 ```
 
 
-Even though there are many variables in the dataframe, here is a quick description of some of the variables collected, and you can find a [data dictionary here](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit#gid=982310896)
+Here is a quick description of some of the variables collected, and you can find a [data dictionary here](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit#gid=982310896)
 
 - `price` = cost per night 
 - `property_type`: type of accommodation (House, Apartment, etc.)
@@ -95,33 +87,14 @@ Even though there are many variables in the dataframe, here is a quick descripti
 
 In the [R4DS Exploratory Data Analysis chapter](http://r4ds.had.co.nz/exploratory-data-analysis.html){target="_blank"}, the authors state:
 
-> "Your goal during EDA is to develop an understanding of your data. The easiest way to do this is to use questions as tools to guide your investigation... EDA is fundamentally a creative process. And like most creative processes, the key to asking quality questions is to generate a large quantity of questions."
 
-
-Conduct a thorough EDA. Recall that an EDA involves three things:
-
-* Looking at the raw values.
-    * `dplyr::glimpse()`
-* Computing summary statistics of the variables of interest, or finding NAs
-    * `mosaic::favstats()`
-    * `skimr::skim()`
-* Creating informative visualizations.
-    * `ggplot2::ggplot()`
-        * `geom_histogram()` or `geom_density()` for numeric continuous variables
-        * `geom_bar()` or `geom_col()` for categorical variables
-    * `GGally::ggpairs()` for scaterrlot/correlation matrix
-        * Note that you can add transparency to points/density plots in the `aes` call, for example: `aes(colour = gender, alpha = 0.4)`
-        
-You may wish to have a level 1 header (`#`) for your EDA, then use level 2 sub-headers (`##`) to make sure you cover all three EDA bases. **At a minimum** you should address these questions:
+Let's conduct a thorough EDA by answering the following questions:
 
 - How many variables/columns? How many rows/observations?
 - Which variables are numbers?
 - Which are categorical or *factor* variables (numeric or character variables with variables that have a fixed and known set of possible values?
 - What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable?
 
-At this stage, you may also find you want to use `filter`, `mutate`, `arrange`, `select`, or `count`. Let your questions lead you! 
-
-> In all cases, please think about the message your plot is conveying. Don’t just say "This is my X-axis, this is my Y-axis", but rather what’s the **so what** of the plot. Tell some sort of story and speculate about the differences in the patterns in no more than a paragraph.
 
 #Experimental Data Analysis for Rio De Janeiro Airbnb Data
 
@@ -190,12 +163,12 @@ name, host_location, location, host_response_time, host_response_rate, host_acce
 There is a positive linear correlation between the cleanliness rating and the overall rating score. Other variables, such as number of bedrooms do not correlate with either cleanliness or overall ratings
 
 ### What are minimum, maximum, and average prices for a night? --> 
-if we try to run a histogram or boxplot or the likes, we will notice that price is discrete and thus not numeric. We will have to fix this should we continue to work with price.
+If we try to run a histogram or boxplot or the likes, we will notice that price is discrete and thus not numeric. We will have to fix this should we continue to work with price.
 
 
 ## Data wrangling
 
-Once you load the data, it's always a good idea to use `glimpse` to see what kind of variables you have and what data type (`chr`, `num`, `logical`, `date`, etc) they are. 
+Once we load the data, it's always a good idea to use `glimpse` to see what kind of variables we have and what data type (`chr`, `num`, `logical`, `date`, etc) they are. 
 
 Notice that some of the price data (`price`) is given as a character string, e.g., "$176.00"
 
@@ -206,7 +179,7 @@ listings <- listings %>%
   mutate(price = parse_number(price))
 ```
   
-Use `typeof(listing$price)` to confirm that `price` is now stored as a number.
+I will use `typeof(listing$price)` to confirm that `price` is now stored as a number.
 
 ```{r}
 typeof(listings$price)
@@ -239,11 +212,11 @@ price_boxplot <- ggplot(data=listings,aes(x=price))+
 price_histogram
 price_boxplot
 ```
+
 When excluding accommodations that apparently have daily prices of over USD 1,000 (some, according to the data, even have prices of about 20k USD!), it becomes obvious that the majority of accommodations are in the lower price range of USD 60 to USD 280, with a gradual decline in number of observations of places with increasing price from then on.
 
 
 ## Propery types
-
 
 Next, we look at the variable `property_type`. We can use the `count` function to determine how many categories there are their frequency. What are the top 4 most common property types? What proportion of the total listings do they make up? 
 
@@ -262,10 +235,11 @@ listings %>%
   # then add the proportion column
   mutate(proportion = n / sum(n))
 ```
+
 We observe 86 categories of property types, as this is the number of rows of output. By far the most common type of accommodation is an entire rental unit, while private rooms inside rental units, entire condos, as well as private rooms in residential homes are the next most common places offered for you to stay in. Having a condo to yourself while exploring Rio sounds fun!
 
 
-Since the vast majority of the observations in the data are one of the top four or five property types, we would like to create a simplified version of `property_type` variable that has 5 categories: the top four categories and `Other`. Fill in the code below to create `prop_type_simplified`.
+Since the vast majority of the observations in the data are one of the top four or five property types, we would like to create a simplified version of `property_type` variable that has 5 categories: the top four categories and `Other`. 
 
 ```{r}
 listings <- listings %>%
@@ -276,7 +250,7 @@ listings <- listings %>%
 ```
 
 
-Use the code below to check that `prop_type_simplified` was correctly made.
+In the code below I will check that `prop_type_simplified` was correctly made:
 
 ```{r}
 listings %>%
@@ -291,7 +265,7 @@ Airbnb is most commonly used for travel purposes, i.e., as an alternative to tra
 - Is ther any value among the common values that stands out? 
 - What is the likely intended purpose for Airbnb listings with this seemingly unusual value for `minimum_nights`?
 
-Filter the airbnb data so that it only includes observations with `minimum_nights <= 4`
+I will also filter the airbnb data so that it only includes observations with `minimum_nights <= 4`
 
 
 ```{r}
@@ -308,7 +282,7 @@ listings_maxreq_4_nights <- listings %>%
         
 # Mapping 
 
-Visualisations of feature distributions and their relations are key to understanding a data set, and they can open up new lines of exploration. While we do not have time to go into all the wonderful geospatial visualisations one can do with R, you can use the following code to start with a map of your city, and overlay all AirBnB coordinates to get an overview of the spatial distribution of AirBnB rentals. For this visualisation we use the `leaflet` package, which includes a variety of tools for interactive maps, so you can easily zoom in-out, click on a point to get the actual AirBnB listing for that specific point, etc.
+Visualisations of feature distributions and their relations are key to understanding a data set, and they can open up new lines of exploration. While we do not have time to go into all the wonderful geospatial visualisations one can do with R, I can use the following code to start with a map of your city, and overlay all AirBnB coordinates to get an overview of the spatial distribution of AirBnB rentals. For this visualisation we use the `leaflet` package, which includes a variety of tools for interactive maps, so you can easily zoom in-out, click on a point to get the actual AirBnB listing for that specific point, etc.
 
 The following code, having downloaded a dataframe `listings` with all AirbnB listings in Milan, will plot on the map all AirBnBs where `minimum_nights` is less than equal to four (4). You could learn more about `leaflet`, by following [the relevant Datacamp course on mapping with leaflet](https://www.datacamp.com/courses/interactive-maps-with-leaflet-in-r)
 

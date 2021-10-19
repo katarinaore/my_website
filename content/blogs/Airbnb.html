@@ -4,7 +4,7 @@ output: html_document
 date: '2021-10-19'
 description: 
 draft: no
-image: 
+image: tile3.jpg
 keywords: ''
 slug: Airbnb
 categories:
@@ -26,11 +26,8 @@ categories:
 <script src="/rmarkdown-libs/leaflet-providers-plugin/leaflet-providers-plugin.js"></script>
 
 
-<p>In your final group assignment you have to analyse data about Airbnb listings and fit a model to predict the total cost for two people staying 4 nights in an AirBnB in a city. You can download AirBnB data from <a href="http://insideairbnb.com/get-the-data.html" target="_blank">insideairbnb.com</a>; it was originally scraped from airbnb.com.</p>
-<p>The following <a href="https://docs.google.com/spreadsheets/d/1QrR-0PUGVWvDiVQL4LOk7w-xXwiDnM3dDtW6k15Hc7s/edit?usp=sharing">Google sheet</a> shows which cities you can use; please choose one of them and add your group name next to it, e.g., A7, B13. No city can have more than 2 groups per stream working on it; if this happens, I will allocate study groups to cities with the help of R’s sampling.</p>
-<p>All of the listings are a GZ file, namely they are archive files compressed by the standard GNU zip (gzip) compression algorithm. You can download, save and extract the file if you wanted, but <code>vroom::vroom()</code> or <code>readr::read_csv()</code> can immediately read and extract this kind of a file. You should prefer <code>vroom()</code> as it is faster, but if vroom() is limited by a firewall, please use <code>read_csv()</code> instead.</p>
-<p><code>vroom</code> will download the *.gz zipped file, unzip, and provide you with the dataframe.</p>
-<p>Even though there are many variables in the dataframe, here is a quick description of some of the variables collected, and you can find a <a href="https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit#gid=982310896">data dictionary here</a></p>
+<p>In this article I will analyse data about Airbnb listings and fit a model to predict the total cost for two people staying 4 nights in an Airbnb in a city of Rio De Janeiro.</p>
+<p>Here is a quick description of some of the variables collected, and you can find a <a href="https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit#gid=982310896">data dictionary here</a></p>
 <ul>
 <li><p><code>price</code> = cost per night</p></li>
 <li><p><code>property_type</code>: type of accommodation (House, Apartment, etc.)</p></li>
@@ -48,44 +45,13 @@ categories:
 <div id="exploratory-data-analysis-eda" class="section level1">
 <h1>Exploratory Data Analysis (EDA)</h1>
 <p>In the <a href="http://r4ds.had.co.nz/exploratory-data-analysis.html" target="_blank">R4DS Exploratory Data Analysis chapter</a>, the authors state:</p>
-<blockquote>
-<p>“Your goal during EDA is to develop an understanding of your data. The easiest way to do this is to use questions as tools to guide your investigation… EDA is fundamentally a creative process. And like most creative processes, the key to asking quality questions is to generate a large quantity of questions.”</p>
-</blockquote>
-<p>Conduct a thorough EDA. Recall that an EDA involves three things:</p>
-<ul>
-<li>Looking at the raw values.
-<ul>
-<li><code>dplyr::glimpse()</code></li>
-</ul></li>
-<li>Computing summary statistics of the variables of interest, or finding NAs
-<ul>
-<li><code>mosaic::favstats()</code></li>
-<li><code>skimr::skim()</code></li>
-</ul></li>
-<li>Creating informative visualizations.
-<ul>
-<li><code>ggplot2::ggplot()</code>
-<ul>
-<li><code>geom_histogram()</code> or <code>geom_density()</code> for numeric continuous variables</li>
-<li><code>geom_bar()</code> or <code>geom_col()</code> for categorical variables</li>
-</ul></li>
-<li><code>GGally::ggpairs()</code> for scaterrlot/correlation matrix
-<ul>
-<li>Note that you can add transparency to points/density plots in the <code>aes</code> call, for example: <code>aes(colour = gender, alpha = 0.4)</code></li>
-</ul></li>
-</ul></li>
-</ul>
-<p>You may wish to have a level 1 header (<code>#</code>) for your EDA, then use level 2 sub-headers (<code>##</code>) to make sure you cover all three EDA bases. <strong>At a minimum</strong> you should address these questions:</p>
+<p>Let’s conduct a thorough EDA by answering the following questions:</p>
 <ul>
 <li>How many variables/columns? How many rows/observations?</li>
 <li>Which variables are numbers?</li>
 <li>Which are categorical or <em>factor</em> variables (numeric or character variables with variables that have a fixed and known set of possible values?</li>
 <li>What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable?</li>
 </ul>
-<p>At this stage, you may also find you want to use <code>filter</code>, <code>mutate</code>, <code>arrange</code>, <code>select</code>, or <code>count</code>. Let your questions lead you!</p>
-<blockquote>
-<p>In all cases, please think about the message your plot is conveying. Don’t just say “This is my X-axis, this is my Y-axis”, but rather what’s the <strong>so what</strong> of the plot. Tell some sort of story and speculate about the differences in the patterns in no more than a paragraph.</p>
-</blockquote>
 <p>#Experimental Data Analysis for Rio De Janeiro Airbnb Data</p>
 <div id="first-let-us-a-get-a-broad-overview" class="section level2">
 <h2>First, let us a get a broad overview</h2>
@@ -5645,17 +5611,17 @@ Number of rows/ observations 23414</p>
 </div>
 <div id="what-are-minimum-maximum-and-average-prices-for-a-night" class="section level3">
 <h3>What are minimum, maximum, and average prices for a night? –&gt;</h3>
-<p>if we try to run a histogram or boxplot or the likes, we will notice that price is discrete and thus not numeric. We will have to fix this should we continue to work with price.</p>
+<p>If we try to run a histogram or boxplot or the likes, we will notice that price is discrete and thus not numeric. We will have to fix this should we continue to work with price.</p>
 </div>
 </div>
 <div id="data-wrangling" class="section level2">
 <h2>Data wrangling</h2>
-<p>Once you load the data, it’s always a good idea to use <code>glimpse</code> to see what kind of variables you have and what data type (<code>chr</code>, <code>num</code>, <code>logical</code>, <code>date</code>, etc) they are.</p>
+<p>Once we load the data, it’s always a good idea to use <code>glimpse</code> to see what kind of variables we have and what data type (<code>chr</code>, <code>num</code>, <code>logical</code>, <code>date</code>, etc) they are.</p>
 <p>Notice that some of the price data (<code>price</code>) is given as a character string, e.g., “$176.00”</p>
 <p>Since <code>price</code> is a quantitative variable, we need to make sure it is stored as numeric data <code>num</code> in the dataframe. To do so, we will first use <code>readr::parse_number()</code> which drops any non-numeric characters before or after the first number</p>
 <pre class="r"><code>listings &lt;- listings %&gt;% 
   mutate(price = parse_number(price))</code></pre>
-<p>Use <code>typeof(listing$price)</code> to confirm that <code>price</code> is now stored as a number.</p>
+<p>I will use <code>typeof(listing$price)</code> to confirm that <code>price</code> is now stored as a number.</p>
 <pre class="r"><code>typeof(listings$price)</code></pre>
 <pre><code>## [1] &quot;double&quot;</code></pre>
 <p>#Double is a type of numeric value for R (to differentiate from integers), so it is working fine!</p>
@@ -5683,8 +5649,8 @@ price_boxplot &lt;- ggplot(data=listings,aes(x=price))+
 price_histogram</code></pre>
 <p><img src="/blogs/Airbnb_files/figure-html/unnamed-chunk-5-1.png" width="648" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>price_boxplot</code></pre>
-<p><img src="/blogs/Airbnb_files/figure-html/unnamed-chunk-5-2.png" width="648" style="display: block; margin: auto;" />
-When excluding accommodations that apparently have daily prices of over USD 1,000 (some, according to the data, even have prices of about 20k USD!), it becomes obvious that the majority of accommodations are in the lower price range of USD 60 to USD 280, with a gradual decline in number of observations of places with increasing price from then on.</p>
+<p><img src="/blogs/Airbnb_files/figure-html/unnamed-chunk-5-2.png" width="648" style="display: block; margin: auto;" /></p>
+<p>When excluding accommodations that apparently have daily prices of over USD 1,000 (some, according to the data, even have prices of about 20k USD!), it becomes obvious that the majority of accommodations are in the lower price range of USD 60 to USD 280, with a gradual decline in number of observations of places with increasing price from then on.</p>
 </div>
 <div id="propery-types" class="section level2">
 <h2>Propery types</h2>
@@ -5702,7 +5668,7 @@ listings %&gt;%
   ungroup(property_type) %&gt;%
   # then add the proportion column
   mutate(proportion = n / sum(n))</code></pre>
-<p><table class="huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:unnamed-chunk-6">
+<table class="huxtable" style="border-collapse: collapse; border: 0px; margin-bottom: 2em; margin-top: 2em; ; margin-left: auto; margin-right: auto;  " id="tab:unnamed-chunk-6">
 <col><col><col><tr>
 <th style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0.4pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">property_type</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">n</th><th style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0.4pt 0.4pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: bold;">proportion</th></tr>
 <tr>
@@ -5879,14 +5845,14 @@ listings %&gt;%
 <td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0.4pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">Yurt</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">1</td><td style="vertical-align: top; text-align: right; white-space: normal; border-style: solid solid solid solid; border-width: 0pt 0.4pt 0.4pt 0pt;    padding: 6pt 6pt 6pt 6pt; font-weight: normal;">4.27e-05</td></tr>
 </table>
 
-We observe 86 categories of property types, as this is the number of rows of output. By far the most common type of accommodation is an entire rental unit, while private rooms inside rental units, entire condos, as well as private rooms in residential homes are the next most common places offered for you to stay in. Having a condo to yourself while exploring Rio sounds fun!</p>
-<p>Since the vast majority of the observations in the data are one of the top four or five property types, we would like to create a simplified version of <code>property_type</code> variable that has 5 categories: the top four categories and <code>Other</code>. Fill in the code below to create <code>prop_type_simplified</code>.</p>
+<p>We observe 86 categories of property types, as this is the number of rows of output. By far the most common type of accommodation is an entire rental unit, while private rooms inside rental units, entire condos, as well as private rooms in residential homes are the next most common places offered for you to stay in. Having a condo to yourself while exploring Rio sounds fun!</p>
+<p>Since the vast majority of the observations in the data are one of the top four or five property types, we would like to create a simplified version of <code>property_type</code> variable that has 5 categories: the top four categories and <code>Other</code>.</p>
 <pre class="r"><code>listings &lt;- listings %&gt;%
   mutate(prop_type_simplified = case_when(
     property_type %in% c(&quot;Entire rental unit&quot;,&quot;Private room in rental unit&quot;, &quot;Entire condominium (condo)&quot;,&quot;Private room in residential home&quot;) ~ property_type, 
     TRUE ~ &quot;Other&quot;
   ))</code></pre>
-<p>Use the code below to check that <code>prop_type_simplified</code> was correctly made.</p>
+<p>In the code below I will check that <code>prop_type_simplified</code> was correctly made:</p>
 <pre class="r"><code>listings %&gt;%
   count(property_type, prop_type_simplified) %&gt;%
   arrange(desc(n)) </code></pre>
@@ -6073,7 +6039,7 @@ We observe 86 categories of property types, as this is the number of rows of out
 <li>Is ther any value among the common values that stands out?</li>
 <li>What is the likely intended purpose for Airbnb listings with this seemingly unusual value for <code>minimum_nights</code>?</li>
 </ul>
-<p>Filter the airbnb data so that it only includes observations with <code>minimum_nights &lt;= 4</code></p>
+<p>I will also filter the airbnb data so that it only includes observations with <code>minimum_nights &lt;= 4</code></p>
 <pre class="r"><code>listings_min_4_nights &lt;- listings %&gt;%
   filter(minimum_nights &lt;= 4)</code></pre>
 <pre class="r"><code># create the df to only include data with a minimum of 4 nights
@@ -6083,7 +6049,7 @@ listings_maxreq_4_nights &lt;- listings %&gt;%
 </div>
 <div id="mapping" class="section level1">
 <h1>Mapping</h1>
-<p>Visualisations of feature distributions and their relations are key to understanding a data set, and they can open up new lines of exploration. While we do not have time to go into all the wonderful geospatial visualisations one can do with R, you can use the following code to start with a map of your city, and overlay all AirBnB coordinates to get an overview of the spatial distribution of AirBnB rentals. For this visualisation we use the <code>leaflet</code> package, which includes a variety of tools for interactive maps, so you can easily zoom in-out, click on a point to get the actual AirBnB listing for that specific point, etc.</p>
+<p>Visualisations of feature distributions and their relations are key to understanding a data set, and they can open up new lines of exploration. While we do not have time to go into all the wonderful geospatial visualisations one can do with R, I can use the following code to start with a map of your city, and overlay all AirBnB coordinates to get an overview of the spatial distribution of AirBnB rentals. For this visualisation we use the <code>leaflet</code> package, which includes a variety of tools for interactive maps, so you can easily zoom in-out, click on a point to get the actual AirBnB listing for that specific point, etc.</p>
 <p>The following code, having downloaded a dataframe <code>listings</code> with all AirbnB listings in Milan, will plot on the map all AirBnBs where <code>minimum_nights</code> is less than equal to four (4). You could learn more about <code>leaflet</code>, by following <a href="https://www.datacamp.com/courses/interactive-maps-with-leaflet-in-r">the relevant Datacamp course on mapping with leaflet</a></p>
 <pre class="r"><code>leaflet(data = listings_maxreq_4_nights) %&gt;%
   addProviderTiles(&quot;OpenStreetMap.Mapnik&quot;) %&gt;% 
