@@ -7,7 +7,7 @@ disqusShortname: ''
 params:
   banner:
     buttonText: Get Started
-    subtitle: |-
+    #subtitle: |-
       A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
       AND RELEASED UNDER THE CREATIVE COMMONS.
     title: Hi, my name is Kate
@@ -35,7 +35,7 @@ params:
     text: Please visit [this page](/)
   favicon: favicon.ico
   footer:
-    copyright: Company Name
+    copyright: Katarina Ore Inc.
     enable: yes
     quicklinks:
       - alt: HTML5 UP
@@ -63,32 +63,32 @@ params:
     button1:
       - name: Get Started
         url: blogs
-    button2:
-      - name: Log In
-        url: '#'
+   # button2:
+   #   - name: Log In
+   #    url: '#'
     links:
       - name: Home
         url: '#'
       - name: Blogs
         url: blogs
-      - name: Generic Blog
-        url: blogs/ipsum
-      - name: Elements
-        url: elements.html
+     # - name: Generic Blog
+     #   url: blogs/ipsum
+     # - name: Elements
+     #   url: elements.html
     menu: Menu
-    subtitle: By HTML5 Up
-    title: Forty
+   # subtitle: By HTML5 Up
+   # title: Forty
   tiles:
     enable: yes
     showcase:
-      - image: pic01.jpg
-        subtitle: Ipsum Dolor Sit Amet
-        title: Aliquam
-        url: blogs/aliquam
-      - image: pic02.jpg
-        subtitle: Feugiat Amet Tempus
-        title: Tempus
-        url: blogs/tempus
+      - image: tile1.jpg
+        subtitle: Background, education, experiences
+        title: About me
+        url: blogs/autobiography
+      - image: tile2.jpg
+        subtitle: Things that interest and inspire me
+        title: Aspirations
+        url: blogs/aspirations
       - image: pic03.jpg
         subtitle: Lorem Etiam Nullam
         title: Magna
