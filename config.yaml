@@ -89,8 +89,8 @@ params:
         subtitle: Things that interest and inspire me
         title: Aspirations
         url: blogs/aspirations
-      - image: pic03.jpg
-        subtitle: Lorem Etiam Nullam
+      - image: tile3.jpg
+        subtitle: Analysis on Airbnb prices in Rio De Janeiro 
         title: Airbnb Prices Analysis
         url: blogs/Airbnb
       - image: pic04.jpg
