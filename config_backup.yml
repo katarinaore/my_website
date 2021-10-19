@@ -21,7 +21,7 @@ params:
     buttonClear: Clear
     buttonSend: Send message
     email:
-      - email: kvasileva.mfa2022@london.edu
+      - email: kate@gmail.com
         title: Email
     enable: yes
     phone:
@@ -50,13 +50,13 @@ params:
 #        url: https://www.facebook.com
       - icon: fa-instagram
         label: Instagram
-        url: https://www.instagram.com/katarinaore/
+        url: https://www.instagram.com
       - icon: fa-github
         label: GitHub
-        url: https://github.com/katarinaore
+        url: https://www.github.com
       - icon: fa-linkedin
         label: LinkedIn
-        url: https://www.linkedin.com/in/katerinavasileva08/
+        url: https://www.linkedin.com
   image: ''
   name: Katerina Vasileva
   navigation:
