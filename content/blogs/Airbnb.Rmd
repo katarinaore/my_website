@@ -85,14 +85,10 @@ Here is a quick description of some of the variables collected, and you can find
 
 # Exploratory Data Analysis (EDA)
 
-In the [R4DS Exploratory Data Analysis chapter](http://r4ds.had.co.nz/exploratory-data-analysis.html){target="_blank"}, the authors state:
-
-
 Let's conduct a thorough EDA by answering the following questions:
 
 - How many variables/columns? How many rows/observations?
-- Which variables are numbers?
-- Which are categorical or *factor* variables (numeric or character variables with variables that have a fixed and known set of possible values?
+- Are there any missing values to be concerned about?
 - What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable?
 
 
@@ -101,13 +97,6 @@ Let's conduct a thorough EDA by answering the following questions:
 #Let's look at first questions:
 
 ```{r}
-# get summary stats
-listings %>%
-  skim()
-
-# get summary stats
-listings %>%
-  str()
 
 # if we try to run a histogram or boxplot or the likes, we will notice that price is discrete and thus not numeric. We will have to fix this should we continue to work with price.
   #ggplot(data=listings,aes(x=price))+
@@ -122,20 +111,14 @@ listings %>%
 Number of columns/ variables  74
 Number of rows/ observations  23414 
 
-### Which variables are numbers? --> _SKIM_
-There are 37 variables that are numeric
 
 ### Are there any missing values to be concerned about? --> _SKIM_
 Some variables have completion rates of only about 50%, which is something to keep in mind should we utilize functions that cut down the used data to only rows in which all data is available. However, most important numeric values, such as ratings, are there, as mainly descriptions are missing.
 
-### Which are categorical or *factor* variables (numeric or character variables with variables that have a fixed and known set of possible values? --> _SKIM_
-name, host_location, location, host_response_time, host_response_rate, host_acceptance_rate, host_is_superhost, host_neighbourhood, host verifications, host_has_profile_pic, host_identity_verified, property_type, room_type, amenities
 
 ### What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable? --> _GGPAIRS_
 There is a positive linear correlation between the cleanliness rating and the overall rating score. Other variables, such as number of bedrooms do not correlate with either cleanliness or overall ratings
 
-### What are minimum, maximum, and average prices for a night? --> 
-If we try to run a histogram or boxplot or the likes, we will notice that price is discrete and thus not numeric. We will have to fix this should we continue to work with price.
 
 
 ## Data wrangling
@@ -157,7 +140,7 @@ I will use `typeof(listing$price)` to confirm that `price` is now stored as a nu
 typeof(listings$price)
 ```
 
-#Double is a type of numeric value for R (to differentiate from integers), so it is working fine!
+
 
 ```{r}
 # now, we can run the histogram and boxplot
@@ -190,23 +173,7 @@ When excluding accommodations that apparently have daily prices of over USD 1,00
 
 ## Propery types
 
-Next, we look at the variable `property_type`. We can use the `count` function to determine how many categories there are their frequency. What are the top 4 most common property types? What proportion of the total listings do they make up? 
-
-```{r}
- # make sure proportions wont be shown in scientific notation
-  options(scipen=999)
-
-listings %>%
-  # prepare the count by property type
-  group_by(property_type) %>%
-  count() %>%
-  # arrange so categories with highest ns appear on top
-  arrange(desc(n)) %>%
-  # ungroup first
-  ungroup(property_type) %>%
-  # then add the proportion column
-  mutate(proportion = n / sum(n))
-```
+Next, we look at the variable `property_type`.
 
 We observe 86 categories of property types, as this is the number of rows of output. By far the most common type of accommodation is an entire rental unit, while private rooms inside rental units, entire condos, as well as private rooms in residential homes are the next most common places offered for you to stay in. Having a condo to yourself while exploring Rio sounds fun!
 
@@ -222,23 +189,13 @@ listings <- listings %>%
 ```
 
 
-In the code below I will check that `prop_type_simplified` was correctly made:
-
-```{r}
-listings %>%
-  count(property_type, prop_type_simplified) %>%
-  arrange(desc(n)) 
-```
-
-
 Airbnb is most commonly used for travel purposes, i.e., as an alternative to traditional hotels. We only want to include  listings in our regression analysis that are intended for travel purposes:
 
 - What are the  most common values for the variable `minimum_nights`? 
-- Is ther any value among the common values that stands out? 
+- Is there any value among the common values that stands out? 
 - What is the likely intended purpose for Airbnb listings with this seemingly unusual value for `minimum_nights`?
 
 I will also filter the airbnb data so that it only includes observations with `minimum_nights <= 4`
-
 
 ```{r}
 listings_min_4_nights <- listings %>%
@@ -256,7 +213,7 @@ listings_maxreq_4_nights <- listings %>%
 
 Visualisations of feature distributions and their relations are key to understanding a data set, and they can open up new lines of exploration. The following code shows a map of the city of Rio De Janeiro, and overlays all AirBnB coordinates to get an overview of the spatial distribution of AirBnB rentals. For this visualisation we use the `leaflet` package, which includes a variety of tools for interactive maps, so you can easily zoom in-out, click on a point to get the actual AirBnB listing for that specific point, etc.
 
-The following code, having downloaded a dataframe `listings` with all AirbnB listings in Milan, will plot on the map all AirBnBs where `minimum_nights` is less than equal to four (4). 
+The following code, having downloaded a dataframe `listings` with all AirbnB listings in Rio, will plot on the map all AirBnBs where `minimum_nights` is less than equal to four (4). 
 
 
 ```{r, out.width = '80%'}
@@ -334,6 +291,7 @@ ggplot(data=listings_maxreq_4_nights, aes(x= log(price_4_nights))) +
 ```
 
 It's better to use the logarithm of price_4_nights for the regression, as logarithm transforms a skewed variable into a more normalized dataset. This way the variance of the dataset becomes constant and we could use simple linear regression for the estimation of this dataset.
+
 
 I will now fit a regression model called `model1` with the following explanatory variables: `prop_type_simplified`, `number_of_reviews`, and `review_scores_rating`. 
 
@@ -469,7 +427,7 @@ mosaic::msummary(model5)
 ```
 
 
-5. For all cities, there are 3 variables that relate to neighborhoods: `neighbourhood`, `neighbourhood_cleansed`, and `neighbourhood_group_cleansed`. There are typically more than 20 neighborhoods in each city, and it wouldn't make sense to include them all in your model. Use your city knowledge, or ask someone with city knowledge, and see whether you can group neighborhoods together so the majority of listings falls in fewer (5-6 max) geographical areas. You would thus need to create a new categorical variable `neighbourhood_simplified` and determine whether location is a predictor of `price_4_nights`
+5. For all cities, there are 3 variables that relate to neighborhoods: `neighbourhood`, `neighbourhood_cleansed`, and `neighbourhood_group_cleansed`. Using city knowledge, I will group neighborhoods together so the majority of listings falls in fewer (5) geographical areas. I will then create a new categorical variable `neighbourhood_simplified` and determine whether location is a predictor of `price_4_nights` 
 
 
 ```{r}
@@ -528,7 +486,6 @@ We can observe a trend of increasing R^2 and decreasing Akaike Information Crite
 I will then use my best model to predict the total cost to stay at this Airbnb for 4 nights. 
 I will also include the appropriate 95% interval with your prediction. Then I will report the point prediction and interval in terms of `price_4_nights`. 
 
-
 We want to book the following accommodation: https://bit.ly/3lJM4eK
 This costs GBP 33.00 (~USD 45.36) per night.
 Let's use model6 to calculate the predicted price, as this model has the higher adj. R^2:
@@ -538,10 +495,6 @@ predicted_price <- exp(5.147 - 0.001*15 - 0.035*5 - 0.297*1 - 0.009*1 + 0.011*0 
 ```
   
 As we can see, our model predicts the price of BRL 123.439 which is equivalent to GBP 16.45 (using the exchange rate at the moment of calculation), whereas the real price is GBP 33. This is not the most precise prediction we could have obtained, but considering a relatively low R^2 of ~44%, this is still in an acceptable range, by the feeling of it.
-
-```{r}
-
-```
 
 
 # Acknowledgements
