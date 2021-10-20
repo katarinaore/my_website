@@ -98,35 +98,7 @@ Let's conduct a thorough EDA by answering the following questions:
 
 #Experimental Data Analysis for Rio De Janeiro Airbnb Data
 
-## First, let us a get a broad overview
-
-```{r}
-#glimpse to get a quick transposed overview of this massive dataframe
-listings %>%
-  glimpse()
-
-# look at first entries experimentally
-listings %>%
-  head()
-
-# look at last entries experimentally
-listings %>%
-  tail()
-
-# display internal structure
-listings %>%
-  str()
-
-# get summary stats
-listings %>%
-  skim()
-
-# create a fun favstats on relation between ratings and number of bedrooms
-favstats(bedrooms ~ review_scores_rating, data=listings)
-
-```
-
-## Next, we can look at some first questions
+#Let's look at first questions:
 
 ```{r}
 # get summary stats
@@ -282,9 +254,9 @@ listings_maxreq_4_nights <- listings %>%
         
 # Mapping 
 
-Visualisations of feature distributions and their relations are key to understanding a data set, and they can open up new lines of exploration. While we do not have time to go into all the wonderful geospatial visualisations one can do with R, I can use the following code to start with a map of your city, and overlay all AirBnB coordinates to get an overview of the spatial distribution of AirBnB rentals. For this visualisation we use the `leaflet` package, which includes a variety of tools for interactive maps, so you can easily zoom in-out, click on a point to get the actual AirBnB listing for that specific point, etc.
+Visualisations of feature distributions and their relations are key to understanding a data set, and they can open up new lines of exploration. The following code shows a map of the city of Rio De Janeiro, and overlays all AirBnB coordinates to get an overview of the spatial distribution of AirBnB rentals. For this visualisation we use the `leaflet` package, which includes a variety of tools for interactive maps, so you can easily zoom in-out, click on a point to get the actual AirBnB listing for that specific point, etc.
 
-The following code, having downloaded a dataframe `listings` with all AirbnB listings in Milan, will plot on the map all AirBnBs where `minimum_nights` is less than equal to four (4). You could learn more about `leaflet`, by following [the relevant Datacamp course on mapping with leaflet](https://www.datacamp.com/courses/interactive-maps-with-leaflet-in-r)
+The following code, having downloaded a dataframe `listings` with all AirbnB listings in Milan, will plot on the map all AirBnBs where `minimum_nights` is less than equal to four (4). 
 
 
 ```{r, out.width = '80%'}
@@ -305,7 +277,7 @@ leaflet(data = listings_maxreq_4_nights) %>%
 
 For the target variable $Y$, we will use the cost for two people to stay at an Airbnb location for four (4) nights. 
 
-Create a new variable called `price_4_nights` that uses `price`, and `accomodates` to calculate the total cost for two people to stay at the Airbnb property for 4 nights. This is the variable $Y$ we want to explain.
+I will create a new variable called `price_4_nights` that uses `price`, and `accomodates` to calculate the total cost for two people to stay at the Airbnb property for 4 nights. This is the variable $Y$ we want to explain.
 
 ```{r}
  listings_maxreq_4_nights <- listings_maxreq_4_nights %>%
@@ -314,7 +286,7 @@ Create a new variable called `price_4_nights` that uses `price`, and `accomodate
 ```
 
 
-Use histograms or density plots to examine the distributions of `price_4_nights` and `log(price_4_nights)`. Which variable should you use for the regression model? Why?
+I will use histograms to examine the distributions of `price_4_nights` and `log(price_4_nights)`. 
 
 ```{r}
 ggplot(data=listings_maxreq_4_nights, aes(x= price_4_nights)) +
@@ -361,9 +333,9 @@ ggplot(data=listings_maxreq_4_nights, aes(x= log(price_4_nights))) +
   theme_bw()
 ```
 
-It better to use the logarithm of price_4_nights for the regression, as logarithm transforms a skewed variable into a more normalized dataset. This way the variance of the dataset becomes constant and we could use simple linear regression for the estimation of this dataset.
+It's better to use the logarithm of price_4_nights for the regression, as logarithm transforms a skewed variable into a more normalized dataset. This way the variance of the dataset becomes constant and we could use simple linear regression for the estimation of this dataset.
 
-Fit a regression model called `model1` with the following explanatory variables: `prop_type_simplified`, `number_of_reviews`, and `review_scores_rating`. 
+I will now fit a regression model called `model1` with the following explanatory variables: `prop_type_simplified`, `number_of_reviews`, and `review_scores_rating`. 
 
 ```{r}
 set.seed(1234)
@@ -373,16 +345,16 @@ mosaic::msummary(model1)
 ```
 
 
-- Interpret the coefficient `review_scores_rating` in terms of `price_4_nights`.
+- Interpretation of the the coefficient `review_scores_rating` in terms of `price_4_nights`:
 Absolute value of t-value is higher than 2, and p-value is below 5% (near zero, even), meaning we can be certain that the score is significant in explaining price. Statistically speaking and given by our current model, an increase in score by 1 unit should result in a decrease in log price by ~0.04. It seems logical that the true reason for this minor correlation could be because of a correlation of the score with other explanatory factors not considered in the model. This is supported by our model's adj. R-squared of only about 10%, meaning our entire model currently only manages to explain about 10% of the variation in price.
 
 
-- Interpret the coefficient of `prop_type_simplified` in terms of `price_4_nights`.
+- Interpretation of the coefficient of `prop_type_simplified` in terms of `price_4_nights`:
 We remind ourselves that the categorical regression does not contain the reference category (in our case, the Condo) since we only include K-1 categories. We instead now compare the other categories to the reference one. As such, the expected log price for the entire condo is 5.97. We cannot estimate about the entire rental unit, as both t- and p-value do not meet our required criteria. The "other" property type category is predicted to be 0.18 log prices lower than the entire condo, while the private room categories both have a more significantly lower expected log price. AS we can see, going with the log price for our analysis makes the final interpretation more difficult and less tangible.
 
 
 
-We want to determine if `room_type` is a significant predictor of the cost for 4 nights, given everything else in the model. Fit a regression model called model2 that includes all of the explanatory variables in `model1` plus `room_type`. 
+We want to determine if `room_type` is a significant predictor of the cost for 4 nights, given everything else in the model. I will fit a regression model called model2 that includes all of the explanatory variables in `model1` plus `room_type`. 
 
 ```{r}
 set.seed(1234)
@@ -396,7 +368,7 @@ We can see that our initial categories became much less significant, with only t
 
 ## Further variables/questions to explore on our own
 
-Our dataset has many more variables, so here are some ideas on how you can extend your analysis
+Let's extend the analysis by answering the following set of questions:
 
 1. Are the number of `bathrooms`, `bedrooms`, `beds`, or size of the house (`accomodates`) significant predictors of `price_4_nights`? Or might these be co-linear variables?
 ```{r}
@@ -523,7 +495,7 @@ Adding the neighbourhood variable increased the adj R^2 by about 5%, and 4 of th
 
 ## Diagnostics, collinearity, summary tables
 
-As you keep building your models, it makes sense to:
+Not let us look at the model residuals:
 
 1. Check the residuals, using `autoplot(model_x)`
 
@@ -534,7 +506,7 @@ autoplot(model6)
 We are good. The best-fit line is approximate to a constant 0, meaning that the variance of the residuals is homogeneously distributed. This satisfies the assumption of the OLS regression that we are using.
 
 
-2. As you start building models with more explanatory variables, make sure you use `car::vif(model_x)`` to calculate the **Variance Inflation Factor (VIF)** for your predictors and determine whether you have collinear variables. A general guideline is that a VIF larger than 5 or 10 is large, and your model may suffer from collinearity. Remove the variable in question and run your model again without it.
+2. Now I will use `car::vif(model_x)`` to calculate the **Variance Inflation Factor (VIF)** for my predictors and determine whether I have collinear variables. A general guideline is that a VIF larger than 5 or 10 is large, and the model may suffer from collinearity. Then it is best to remove the variable in question and run the model again without it.
 
 ```{r}
 #car::vif(model6)
@@ -543,7 +515,7 @@ We are good. The best-fit line is approximate to a constant 0, meaning that the 
 
 
 
-3. Create a summary table, using `huxtable` (https://mfa2022.netlify.app/example/modelling_side_by_side_tables/) that shows which models you worked on, which predictors are significant, the adjusted $R^2$, and the Residual Standard Error.
+3. Let's create a summary table, using `huxtable` that shows which models we've worked on, which predictors are significant, the adjusted $R^2$, and the Residual Standard Error:
 
 ```{r}
 huxreg(model1, model2, model3, model4, model5, model6)
@@ -552,11 +524,11 @@ huxreg(model1, model2, model3, model4, model5, model6)
 We can observe a trend of increasing R^2 and decreasing Akaike Information Criterion when adding more and more variables to the model, as is expected. Of course, the heavily filtered $model6$ uses a far lower N of observations, making us a little bit more cautious about the results. Models 5 and 6 are both massive improvements over the first models that we tried out. These first models had low explanatory power in terms of R^2 even though controlling for many variables. The later models’ improved results stem from a better choice of variables.
 
 
-4. Finally, you must use the best model you came up with for prediction. Suppose you are planning to visit the city you have been assigned to over reading week, and you want to stay in an Airbnb. Find Airbnb in your destination city that are apartments with a private room, have at least 10 reviews, and an average rating of at least 90. 
-Use your best model to predict the total cost to stay at this Airbnb for 4 nights. 
-Include the appropriate 95% interval with your prediction. Report the point prediction and interval in terms of `price_4_nights`. 
-  - if you used a log(price_4_nights) model, make sure you anti-log to convert the value in $. You can read more about [hot to interpret a regression model when some variables are log transformed here](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqhow-do-i-interpret-a-regression-model-when-some-variables-are-log-transformed/)
- \
+4. Finally, I will use the best model we came up with for prediction. Suppose we are planning to visit Rio De Janeiro, and we want to stay in an Airbnb. We will find Airbnb in Rio that are apartments with a private room, have at least 10 reviews, and an average rating of at least 90. 
+I will then use my best model to predict the total cost to stay at this Airbnb for 4 nights. 
+I will also include the appropriate 95% interval with your prediction. Then I will report the point prediction and interval in terms of `price_4_nights`. 
+
+
 We want to book the following accommodation: https://bit.ly/3lJM4eK
 This costs GBP 33.00 (~USD 45.36) per night.
 Let's use model6 to calculate the predicted price, as this model has the higher adj. R^2:
@@ -569,37 +541,6 @@ As we can see, our model predicts the price of BRL 123.439 which is equivalent t
 
 ```{r}
 
-```
-
-
-# Deliverables
-
-- By midnight on Monday 18 Oct 2021, you must upload on Canvas a short presentation (max 4-5 slides) with your findings, as some groups will be asked to present in class. You should present your Exploratory Data Analysis, as well as your best model. In addition, you must upload on Canvas your final report, written  using R Markdown to introduce, frame, and describe your story and findings. You should include the following in the memo:
-
-1. Executive Summary: Based on your best model, indicate the factors that influence `price_4_nights`.
-This should be written for an intelligent but non-technical audience. All
-other sections can include technical writing.
-2. Data Exploration and Feature Selection: Present key elements of the data, including tables and
-graphs that help the reader understand the important variables in the dataset. Describe how the
-data was cleaned and prepared, including feature selection, transformations, interactions, and
-other approaches you considered.
-3. Model Selection and Validation: Describe the model fitting and validation process used. State
-the model you selected and why they are preferable to other choices.
-4. Findings and Recommendations: Interpret the results of the selected model and discuss
-additional steps that might improve the analysis
-  
-  
-
-Remember to follow R Markdown etiquette rules and style; don't have the Rmd output extraneous messages or warnings, include summary tables in nice tables (use `kableExtra`), and remove any placeholder texts from past Rmd templates; in other words, (i.e. I don't want to see stuff I wrote in your final report.)
-  
-  
-# Rubric
-
-Your work will be assessed on a rubric which you can find here
-
-
-```{r rubric, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "rubric.png"), error = FALSE)
 ```
 
 
