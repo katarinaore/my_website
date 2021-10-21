@@ -1,10 +1,4 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 tidyverse
 ggplot2
 tibble
@@ -37,3 +31,14 @@ tidyquant
 rvest
 httr
 readxl
+GGally
+ggfortify
+rsample
+broom
+huxtable
+kableExtra
+moderndive
+leaflet
+tidytext
+viridisLite
+viridis

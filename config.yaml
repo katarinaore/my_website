@@ -84,7 +84,7 @@ params:
       - image: tile1.jpg
         subtitle: Background, education, experiences
         title: About me
-        url: blogs/autobiography
+        url: blogs/about
       - image: tile2.jpg
         subtitle: Things that interest and inspire me
         title: Aspirations
