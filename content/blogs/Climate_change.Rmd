@@ -4,7 +4,7 @@ output: html_document
 date: '2021-10-19'
 description: 
 draft: no
-image: 
+image: tile4.jpg
 keywords: ''
 slug: climate
 categories:
@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 
 
 
-```{r}
+```{r load-libraries, echo=FALSE}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
 library(ggthemes)
