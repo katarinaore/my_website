@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 
 
 
-```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+```{r}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
 library(ggthemes)
