@@ -122,10 +122,6 @@ Inspect your dataframe. It should have three variables now, one each for
 
 Let us plot the data using a time-series scatter plot, and add a trendline. To do that, we first need to create a new variable called `date` in order to ensure that the `delta` values are plot chronologically. 
 
-
-> In the following chunk of code, I used the `eval=FALSE` argument, which does not run a chunk of code; I did so that you can knit the document before tidying the data and creating a new dataframe `tidyweather`. When you actually want to run this code and knit your document, you must delete `eval=FALSE`, **not just here but in all chunks were `eval=FALSE` appears.**
-
-
 ```{r scatter_plot, eval=FALSE}
 
 tidyweather <- tidyweather %>%
@@ -143,7 +139,7 @@ ggplot(tidyweather, aes(x=date, y = delta))+
 
 ```
 
-Is the effect of increasing temperature more pronounced in some months? Use `facet_wrap()` to produce a seperate scatter plot for each month, again with a smoothing line. Your chart should human-readable labels; that is, each month should be labeled "Jan", "Feb", "Mar" (full or abbreviated month names are fine), not `1`, `2`, `3`. 
+Is the effect of increasing temperature more pronounced in some months? W e will use `facet_wrap()` to produce a seperate scatter plot for each month, again with a smoothing line. 
 
 ```{r facet_wrap, echo=FALSE}
 
@@ -178,9 +174,8 @@ comparison <- tidyweather %>%
 
 ```
 
-Inspect the `comparison` dataframe by clicking on it in the `Environment` pane.
 
-Now that we have the `interval` variable, we can create a density plot to study the distribution of monthly deviations (`delta`), grouped by the different time periods we are interested in. Set `fill` to `interval` to group and colour the data by different time periods.
+Now that we have the `interval` variable, we can create a density plot to study the distribution of monthly deviations (`delta`), grouped by the different time periods we are interested in.
 
 ```{r density_plot, eval=FALSE}
 
@@ -227,7 +222,7 @@ ggplot(average_annual_anomaly, aes(x=Year, y= mean_delta))+
 
 > A one-degree global change is significant because it takes a vast amount of heat to warm all the oceans, atmosphere, and land by that much. In the past, a one- to two-degree drop was all it took to plunge the Earth into the Little Ice Age.
 
-Your task is to construct a confidence interval for the average annual delta since 2011, both using a formula and using a bootstrap simulation with the `infer` package. Recall that the dataframe `comparison` has already grouped temperature anomalies according to time intervals; we are only interested in what is happening  between 2011-present.
+Let us construct a confidence interval for the average annual delta since 2011, both using a formula and using a bootstrap simulation with the `infer` package; we are only interested in what is happening  between 2011-present.
 
 ```{r, calculate_CI_using_formula, eval=FALSE}
 formula_ci <- comparison %>% 
@@ -269,7 +264,6 @@ CI_using_bootstrap <- comparison %>%
 CI_using_bootstrap
 ```
 
-> What is the data showing us? Please type your answer after (and outside!) this blockquote. You have to explain what you have done, and the interpretation of the result. One paragraph max, please!
 
 In the first case, we build the confidence interval manually using the formula, whereas we use the bootstrapping technique with 10,000 replications the second time around. We expected the two intervals to be closer to one another, as the bootstrapping technique produced a much wider range than the first one. At least, the first range is included and in the "middle" of the wider ranged produced by bootstrapping, giving us some further confidence that our technique is correct and that the 95% confidence is simply harder to achieve for our dataset using the bootstrapping technique.
 
@@ -287,9 +281,6 @@ In this exercise we analyze whether there are any differences between the propor
 global_warming_pew <- read_csv(here::here("data", "global_warming_pew.csv"))
 ```
 
-You will also notice that many responses should not be taken into consideration, like "No Answer", "Don't Know", "Not applicable", "Refused to Answer".
-
-
 ```{r}
 global_warming_pew %>% 
   count(party_or_ideology, response)
@@ -297,9 +288,6 @@ global_warming_pew %>%
 
 We will be constructing three 95% confidence intervals to estimate population parameters, for the % who believe that **Earth is warming**, accoridng to their party or ideology. You can create the CIs using the formulas by hand, or use `prop.test()`-- just rememebr to exclude the Dont know / refuse to answer!
 
-Does it appear that whether or not a respondent believes the earth is warming is independent of their party ideology? You may want to 
-
-You may want to read on [The challenging politics of climate change](https://www.brookings.edu/research/the-challenging-politics-of-climate-change/)
 
 ```{r}
 global_warming_filtered <- global_warming_pew %>% 
@@ -331,8 +319,6 @@ conservative_republican_table <- do.call(rbind.data.frame, conservative_republic
 
 # Biden's Approval Margins
 
-As we saw in class, fivethirtyeight.com has detailed data on [all polls that track the president's approval ](https://projects.fivethirtyeight.com/biden-approval-ratings)
-
 ```{r, cache=TRUE}
 # Import approval polls data directly off fivethirtyeight website
 approval_polllist <- read_csv('https://projects.fivethirtyeight.com/biden-approval-data/approval_polllist.csv') 
@@ -362,13 +348,7 @@ skim(approval_polllist)
 
 ## Create a plot
 
-What I would like you to do is to calculate the average net approval rate (approve- disapprove) for each week since he got into office. I want you plot the net approval, along with its 95% confidence interval. There are various dates given for each poll, please use `enddate`, i.e., the date the poll ended.
-
-Also, please add an orange line at zero. Your plot should look like this:
-
-```{r trump_margins, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "biden_approval_margin.png"), error = FALSE)
-```
+Let us calculate the average net approval rate (approve- disapprove) for each week since he got into office. I want you plot the net approval, along with its 95% confidence interval. There are various dates given for each poll, please use `enddate`, i.e., the date the poll ended.
 
 ```{r}
 # Calculate the weekly net approval rate, along with sample size and standard deviation
@@ -405,14 +385,14 @@ approval_byweek %>%
 
 ## Compare Confidence Intervals
 
-Compare the confidence intervals for `week 3` and `week 25`. Can you explain what's going on? One paragraph would be enough.
+Lets us compare the confidence intervals for `week 3` and `week 25`:
 
 In week 3 (7), the confidence interval is extremely wide, meaning that the variance of the responses was very high. Polls could have differed significantly across the spectrum. Our n is only 4, compared to a much higher n of about 50 in the following weeks. As we are adding a higher "uncertainty discount" to our confidence interval, this is directly reflected in the output. With few datapoints, it is hard to predict what range the true value must be in.
 
 
 # Challenge 1: Excess rentals in TfL bike sharing
 
-Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following
+Recall the TfL data on how many bikes were hired every single day. We can get the latest data by running the following:
 
 ```{r, get_tfl_data, cache=TRUE}
 url <- "https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx"
@@ -446,7 +426,7 @@ Look at May and Jun and compare 2020 with the previous years. What's happening?
 
 May and June of 2020 show unusually low levels of bike rentals throughout. This is most likely related to COVID-19, but without any further data, we cant say for sure and we dont want to bring our bias into the classroom, do we? Bastard.
 
-However, the challenge I want you to work on is to reproduce the following two graphs.
+Let us reproduce the following two graphs:
 
 ```{r tfl_absolute_monthly_change, echo=FALSE, out.width="100%"}
 knitr::include_graphics(here::here("images", "tfl_monthly.png"), error = FALSE)
@@ -458,18 +438,12 @@ The second one looks at percentage changes from the expected level of weekly ren
 knitr::include_graphics(here::here("images", "tfl_weekly.png"), error = FALSE)
 ```
 
-For both of these graphs, you have to calculate the expected number of rentals per week or month between 2016-2019 and then, see how each week/month of 2020-2021 compares to the expected rentals. Think of the calculation `excess_rentals = actual_rentals - expected_rentals`. 
+For both of these graphs, we have to calculate the expected number of rentals per week or month between 2016-2019 and then, see how each week/month of 2020-2021 compares to the expected rentals. Think of the calculation `excess_rentals = actual_rentals - expected_rentals`. 
 
-Should you use the mean or the median to calculate your expected rentals? Why?
 
 The median should be the better predictor for the practical forecasting application. The mean iseasily obscured by extreme values or outliers, and in an economic scenario we would most likely want to clean our prediction for that.
 
 
-In creating your plots, you may find these links useful:
-
-- https://ggplot2.tidyverse.org/reference/geom_ribbon.html
-- https://ggplot2.tidyverse.org/reference/geom_tile.html 
-- https://ggplot2.tidyverse.org/reference/geom_rug.html
 
 ```{r}
 # Compute the mean of number of bikes hired for each month during the time period 2016-19
@@ -551,18 +525,6 @@ bike_weekly_plot %>%
 
 # Challenge 2: How has the CPI and its components changed over the last few years?
 
-Remember how we used the tidyqant package to download CPI data. In this exercise, I would like you to do the following:
-
-1. You can find [CPI components at  FRED](https://fredaccount.stlouisfed.org/public/datalist/843). You should adapt the code from German polls to scrape the FRED website and pull all of the CPI components into a vector. FIY, the list of components is the second table in that webpage.
-1. Once you have a vector of components, you can then pass it to `tidyquant::tq_get(get = "economic.data", from =  "2000-01-01")` to get all data since January 1, 2000
-1. Since the data you download is an index with various starting dates, you need to calculate the yearly, or 12-month change. To do this you need to use the `lag` function, and specifically, `year_change = value/lag(value, 12) - 1`; this means you are comparing the current month's value with that 12 months ago lag(value, 12).
-1. I want you to order components so the higher the yearly change, the earlier does that component appear.
-1. You should also make sure that the **All Items** CPI (CPIAUCSL) appears first.
-1. Add a `geom_smooth()` for each component to get a sense of the overall trend.
-1 You may want to colour the points according to whether yearly change was positive or negative. 
-
-Having done this, you should get this graph.
-
 ```{r cpi_all_components_since_2016, echo=FALSE, out.width="100%"}
 knitr::include_graphics(here::here("images", "cpi_components_since_2016.png"), error = FALSE)
 ```
@@ -630,33 +592,3 @@ CPI_df %>%
     theme_bw()
 
 ```
-
-
-
-
-This graphs is fine, but perhaps has too many sub-categories. You can find the [relative importance of components in the Consumer Price Indexes: U.S. city average, December 2020](https://www.bls.gov/cpi/tables/relative-importance/2020.htm) here. Can you choose a smaller subset of the components you have and only list the major categories (Housing, Transportation, Food and beverages, Medical care, Education and communication, Recreation, and Apparel), sorted according to their relative importance?
-
-
-# Deliverables
-
-As usual, there is a lot of explanatory text, comments, etc. You do not need these, so delete them and produce a stand-alone document that you could share with someone. Knit the edited and completed R Markdown file as an HTML document (use the "Knit" button at the top of the script editor window) and upload it to Canvas.
-
-# Details
-
-- Who did you collaborate with: TYPE NAMES HERE
-- Approximately how much time did you spend on this problem set: ANSWER HERE
-- What, if anything, gave you the most trouble: ANSWER HERE
-
-
-**Please seek out help when you need it,** and remember the [15-minute rule](https://mam202.netlify.app/syllabus/#the-15-minute-rule){target=_blank}. You know enough R (and have enough examples of code from class and your readings) to be able to do this. If you get stuck, ask for help from others, post a question on Slack-- and remember that I am here to help too!  
-
-> As a true test to yourself, do you understand the code you submitted and are you able to explain it to someone else? 
-
-
-# Rubric
-
-Check minus (1/5): Displays minimal effort. Doesn't complete all components. Code is poorly written and not documented. Uses the same type of plot for each graph, or doesn't use plots appropriate for the variables being analyzed. 
-
-Check (3/5): Solid effort. Hits all the elements. No clear mistakes. Easy to follow (both the code and the output). 
-
-Check plus (5/5): Finished all components of the assignment correctly and addressed both challenges. Code is well-documented (both self-documented and with additional comments as necessary). Used tidyverse, instead of base R. Graphs and tables are properly labelled. Analysis is clear and easy to follow, either because graphs are labeled clearly or you've written additional text to describe how you interpret the output.
