@@ -30,4 +30,42 @@ knitr::opts_chunk$set(
 
 ```
 
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/me.jpg", error = FALSE)
+```
 
+I am currently reading for Masters in Financial Analysis at London Business School. After graduating, I plan to continue my career in investment banking, in which I already have around 8 months of experience.
+
+# Education 
+
+Prior to LBS, I studied in the following universities:
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/uol.jpeg", error = FALSE)
+```
+
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/spbu.png", error = FALSE)
+```
+
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/hse.png", error = FALSE)
+```
+
+# Professional experience
+
+And worked in these companies as investment banking intern and then analyst during the last internship at Althaus Group:
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/1.jpg", error = FALSE)
+```
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/2.jpg", error = FALSE)
+```
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/3.png", error = FALSE)
+```
