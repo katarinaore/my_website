@@ -93,10 +93,10 @@ params:
         subtitle: Analysis on Airbnb prices in Rio De Janeiro 
         title: Airbnb Prices Analysis
         url: blogs/Airbnb
-      - image: pic04.jpg
-        subtitle: Nisl Sed Aliquam
-        title: Ipsum
-        url: blogs/ipsum
+      - image: tile4.jpg
+        subtitle: Analysis of the temperature anomalies in the Northern Hemisphere
+        title: Climate Change Analysis
+        url: blogs/climate
       #- image: pic05.jpg
       #  subtitle: Ipsum Dolor Sit Amet
       #  title: Consequat

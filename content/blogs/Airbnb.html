@@ -60,16 +60,18 @@ listings %&gt;%
   select(c(host_has_profile_pic, bedrooms, host_is_superhost, host_response_time, review_scores_rating, review_scores_cleanliness)) %&gt;% 
   ggpairs(alpha = 0.3) +
   theme_bw()</code></pre>
-<p><img src="/blogs/Airbnb_files/figure-html/unnamed-chunk-1-1.png" width="648" style="display: block; margin: auto;" />
-### How many variables/columns? How many rows/observations? –&gt; <em>SKIM</em>
-Number of columns/ variables 74
-Number of rows/ observations 23414</p>
-<div id="are-there-any-missing-values-to-be-concerned-about-skim" class="section level3">
-<h3>Are there any missing values to be concerned about? –&gt; <em>SKIM</em></h3>
+<p><img src="/blogs/Airbnb_files/figure-html/unnamed-chunk-1-1.png" width="648" style="display: block; margin: auto;" /></p>
+<div id="how-many-variablescolumns-how-many-rowsobservations" class="section level3">
+<h3>How many variables/columns? How many rows/observations?</h3>
+<p>Number of columns/ variables: 74
+Number of rows/ observations: 23414</p>
+</div>
+<div id="are-there-any-missing-values-to-be-concerned-about" class="section level3">
+<h3>Are there any missing values to be concerned about?</h3>
 <p>Some variables have completion rates of only about 50%, which is something to keep in mind should we utilize functions that cut down the used data to only rows in which all data is available. However, most important numeric values, such as ratings, are there, as mainly descriptions are missing.</p>
 </div>
-<div id="what-are-the-correlations-between-variables-does-each-scatterplot-support-a-linear-relationship-between-variables-do-any-of-the-correlations-appear-to-be-conditional-on-the-value-of-a-categorical-variable-ggpairs" class="section level3">
-<h3>What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable? –&gt; <em>GGPAIRS</em></h3>
+<div id="what-are-the-correlations-between-variables-does-each-scatterplot-support-a-linear-relationship-between-variables-do-any-of-the-correlations-appear-to-be-conditional-on-the-value-of-a-categorical-variable" class="section level3">
+<h3>What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable?</h3>
 <p>There is a positive linear correlation between the cleanliness rating and the overall rating score. Other variables, such as number of bedrooms do not correlate with either cleanliness or overall ratings</p>
 </div>
 <div id="data-wrangling" class="section level2">
@@ -227,11 +229,13 @@ mosaic::msummary(model1)</code></pre>
 ## Multiple R-squared:  0.104,  Adjusted R-squared:  0.103 
 ## F-statistic:  234 on 6 and 12130 DF,  p-value: &lt;2e-16</code></pre>
 <ul>
-<li><p>Interpretation of the the coefficient <code>review_scores_rating</code> in terms of <code>price_4_nights</code>:
-Absolute value of t-value is higher than 2, and p-value is below 5% (near zero, even), meaning we can be certain that the score is significant in explaining price. Statistically speaking and given by our current model, an increase in score by 1 unit should result in a decrease in log price by ~0.04. It seems logical that the true reason for this minor correlation could be because of a correlation of the score with other explanatory factors not considered in the model. This is supported by our model’s adj. R-squared of only about 10%, meaning our entire model currently only manages to explain about 10% of the variation in price.</p></li>
-<li><p>Interpretation of the coefficient of <code>prop_type_simplified</code> in terms of <code>price_4_nights</code>:
-We remind ourselves that the categorical regression does not contain the reference category (in our case, the Condo) since we only include K-1 categories. We instead now compare the other categories to the reference one. As such, the expected log price for the entire condo is 5.97. We cannot estimate about the entire rental unit, as both t- and p-value do not meet our required criteria. The “other” property type category is predicted to be 0.18 log prices lower than the entire condo, while the private room categories both have a more significantly lower expected log price. AS we can see, going with the log price for our analysis makes the final interpretation more difficult and less tangible.</p></li>
+<li>Interpretation of the the coefficient <code>review_scores_rating</code> in terms of <code>price_4_nights</code>:</li>
 </ul>
+<p>Absolute value of t-value is higher than 2, and p-value is below 5% (near zero, even), meaning we can be certain that the score is significant in explaining price. Statistically speaking and given by our current model, an increase in score by 1 unit should result in a decrease in log price by ~0.04. It seems logical that the true reason for this minor correlation could be because of a correlation of the score with other explanatory factors not considered in the model. This is supported by our model’s adj. R-squared of only about 10%, meaning our entire model currently only manages to explain about 10% of the variation in price.</p>
+<ul>
+<li>Interpretation of the coefficient of <code>prop_type_simplified</code> in terms of <code>price_4_nights</code>:</li>
+</ul>
+<p>We remind ourselves that the categorical regression does not contain the reference category (in our case, the Condo) since we only include K-1 categories. We instead now compare the other categories to the reference one. As such, the expected log price for the entire condo is 5.97. We cannot estimate about the entire rental unit, as both t- and p-value do not meet our required criteria. The “other” property type category is predicted to be 0.18 log prices lower than the entire condo, while the private room categories both have a more significantly lower expected log price. AS we can see, going with the log price for our analysis makes the final interpretation more difficult and less tangible.</p>
 <p>We want to determine if <code>room_type</code> is a significant predictor of the cost for 4 nights, given everything else in the model. I will fit a regression model called model2 that includes all of the explanatory variables in <code>model1</code> plus <code>room_type</code>.</p>
 <pre class="r"><code>set.seed(1234)
 model2 &lt;- lm(log(price_4_nights) ~ room_type + prop_type_simplified + number_of_reviews + review_scores_rating, 
@@ -265,8 +269,8 @@ mosaic::msummary(model2)</code></pre>
 ## Multiple R-squared:  0.146,  Adjusted R-squared:  0.146 
 ## F-statistic:  231 on 9 and 12127 DF,  p-value: &lt;2e-16</code></pre>
 <p>We can see that our initial categories became much less significant, with only the other property type category still fulfilling significance requirements. Our adj R^2 increased slightly to c. 15%. The room types seem to have stronger predictory power as the estimates are higher and two of the three categories have very strong t- and p-values. To conclude, however, it must be noted that the R^2 is still very low and the model does not have a lot of explanatory power. We should choose different variables!</p>
-<div id="further-variablesquestions-to-explore-on-our-own" class="section level2">
-<h2>Further variables/questions to explore on our own</h2>
+<div id="further-analysis" class="section level2">
+<h2>Further analysis</h2>
 <p>Let’s extend the analysis by answering the following set of questions:</p>
 <ol style="list-style-type: decimal">
 <li>Are the number of <code>bathrooms</code>, <code>bedrooms</code>, <code>beds</code>, or size of the house (<code>accomodates</code>) significant predictors of <code>price_4_nights</code>? Or might these be co-linear variables?</li>
