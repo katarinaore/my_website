@@ -43,25 +43,31 @@ library(skimr)
 library(janitor)
 library(vroom)
 library(tidyquant)
+library(httr)
+library(readxl)
 library(rvest) # to scrape wikipedia page
 ```
 
+Let us first load the file:
 
+```{r weather_data, cache=TRUE}
 
-```{r load-libraries, include=FALSE}
-library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
-library(mosaic)
-library(ggthemes)
-library(lubridate)
-library(here)
-library(skimr)
-library(janitor)
-library(httr)
-library(readxl)
-library(vroom)
+weather <- 
+  read_csv("https://data.giss.nasa.gov/gistemp/tabledata_v4/NH.Ts+dSST.csv", 
+           skip = 1, 
+           na = "***")
+
 ```
 
+Then let us create the new dataframe `tidyweather`, name the variable containing the name of the month as `month`, and the temperature deviation values as `delta`:
 
+```{r tidyweather}
+tidyweather <-  weather %>%
+  select(c(1:13)) %>%
+  pivot_longer(cols = 2:13, #columns 3 to 5
+               names_to = "Month",
+               values_to = "delta")
+```
 
 # Climate change and temperature anomalies 
 
