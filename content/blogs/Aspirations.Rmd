@@ -1,0 +1,51 @@
+---
+title: "Aspirations"
+output: html_document
+date: '2021-10-19'
+description: 
+draft: no
+image: 
+keywords: ''
+slug: aspire
+categories:
+- ''
+- ''
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE,
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+
+```
+
+
+During my path from begin a child to now becoming a young woman, I was always aspired by successful people, their lifestyle, their hard work and ability to push through even when it seems like there is no way out.
+
+Among the people I looked up to I would distinguish Ruth Ginsburg:
+
+
+# Joan Ruth Bader Ginsburg
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("/img/Ruth.png", error = FALSE)
+```
+
+She was an American lawyer and jurist who served as an associate justice of the Supreme Court of the United States from 1993.
+
+She is known for protecting women's rights, voting rights, abortion rights and other.
+
+
+
+

@@ -4,7 +4,7 @@ output: html_document
 date: '2021-10-19'
 description: 
 draft: no
-image: tile1.jpg
+image: 
 keywords: ''
 slug: about
 categories:
@@ -56,7 +56,7 @@ knitr::include_graphics("/img/hse.png", error = FALSE)
 
 # Professional experience
 
-And worked in these companies as investment banking intern and then analyst during the last internship at Althaus Group:
+Career-wise, I have worked in these companies as investment banking intern and then analyst during the last internship at Althaus Group:
 
 ```{r, echo=FALSE, out.width="100%"}
 knitr::include_graphics("/img/1.jpg", error = FALSE)
